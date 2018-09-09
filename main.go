@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 func main() {
@@ -22,7 +23,18 @@ func main() {
 	}
 }
 
-func tree(path string) error {
-	fmt.Println(path)
-	return nil
+func tree(root string) error {
+	//fmt.Println(path)
+	err := filepath.Walk(root, func(path string, fileinfo os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if fileinfo.Name()[0] == '.' {
+			return filepath.SkipDir
+		}
+
+		fmt.Println(path)
+		return nil
+	})
+	return err
 }
